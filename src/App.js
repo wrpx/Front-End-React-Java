@@ -1,24 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+///App.js
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+import FormProduct from "./components/FormProduct";
+import LoginForm from "./components/LoginForm";
+import useAuthStore from "./store/useAuthStore";
+
+function ProtectedRoute({ children }) {
+  const authStore = useAuthStore();
+  const location = useLocation();
+
+  React.useEffect(() => {
+    if (location.pathname === "/") {
+      authStore.logout();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location, authStore.logout]);
+
+  return children;
+}
 
 function App() {
+  const { isAuthenticated } = useAuthStore();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <ProtectedRoute>
+        <Routes>
+          <Route path="/" element={<LoginForm />} />
+          <Route
+            path="/products"
+            element={isAuthenticated ? <FormProduct /> : <Navigate to="/" />}
+          />
+        </Routes>
+      </ProtectedRoute>
+    </Router>
   );
 }
 
