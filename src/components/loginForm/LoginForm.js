@@ -56,6 +56,7 @@ const LoginForm = () => {
               required
               value={signupUsername}
               onChange={(e) => setSignupUsername(e.target.value)}
+              autoComplete="username"
             />
             <input
               type="password"
@@ -63,6 +64,7 @@ const LoginForm = () => {
               required
               value={signupPassword}
               onChange={(e) => setSignupPassword(e.target.value)}
+              autoComplete="new-password"
             />
             <button type="submit">Sign up</button>
           </form>
@@ -86,6 +88,7 @@ const LoginForm = () => {
               required
               value={loginPassword}
               onChange={(e) => setLoginPassword(e.target.value)}
+              autoComplete="current-password"
             />
             <button type="submit">Login</button>
           </form>
