@@ -1,7 +1,7 @@
 ///FormProduct.js
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import apiService from "../service/apiService";
+import apiService from "../../service/apiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import "./FormProduct.css";

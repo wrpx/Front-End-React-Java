@@ -1,43 +1,42 @@
-import React, { useState } from "react";
+import React from "react";
 import "./LoginForm.css";
-import apiService from "../service/apiService";
+import apiService from "../../service/apiService";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from "../store/useAuthStore";
+import useAuthStore from "../../store/useAuthStore";
+import formProductStore from "../../store/formProductStore";
 
 const LoginForm = () => {
-  const [loginUsername, setLoginUsername] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [signupUsername, setSignupUsername] = useState("");
-  const [signupPassword, setSignupPassword] = useState("");
+  const {
+    loginUsername,
+    setLoginUsername,
+    loginPassword,
+    setLoginPassword,
+    signupUsername,
+    setSignupUsername,
+    signupPassword,
+    setSignupPassword,
+  } = formProductStore();
 
   const navigate = useNavigate();
   const { login } = useAuthStore();
 
-  const handleSubmitLogin = async (event) => {
+  const handleSubmit = async (event, isLogin) => {
     event.preventDefault();
-    try {
-      await apiService.login({
-        username: loginUsername,
-        password: loginPassword,
-      });
 
-      login();
-      navigate("/products");
-    } catch (error) {
-      console.error("Login failed", error);
-    }
-  };
+    const username = isLogin ? loginUsername : signupUsername;
+    const password = isLogin ? loginPassword : signupPassword;
+    const apiMethod = isLogin ? apiService.login : apiService.register;
 
-  const handleSubmitSignup = async (event) => {
-    event.preventDefault();
     try {
-      const response = await apiService.register({
-        username: signupUsername,
-        password: signupPassword,
-      });
-      console.log("Signup successful", response);
+      const response = await apiMethod({ username, password });
+      if (isLogin) {
+        login();
+        navigate("/products");
+      } else {
+        console.log("Signup successful", response);
+      }
     } catch (error) {
-      console.error("Signup failed", error);
+      console.error(isLogin ? "Login failed" : "Signup failed", error);
     }
   };
 
@@ -47,7 +46,7 @@ const LoginForm = () => {
         <input type="checkbox" id="chk" aria-hidden="true" />
 
         <div className="signup">
-          <form onSubmit={handleSubmitSignup}>
+          <form onSubmit={(e) => handleSubmit(e, false)}>
             <label htmlFor="chk" aria-hidden="true">
               Sign up
             </label>
@@ -70,7 +69,7 @@ const LoginForm = () => {
         </div>
 
         <div className="login">
-          <form onSubmit={handleSubmitLogin}>
+          <form onSubmit={(e) => handleSubmit(e, true)}>
             <label htmlFor="chk" aria-hidden="true">
               Login
             </label>

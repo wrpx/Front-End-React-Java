@@ -7,8 +7,8 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import FormProduct from "./components/FormProduct";
-import LoginForm from "./components/LoginForm";
+import FormProduct from "./components/formProduct/FormProduct";
+import LoginForm from "./components/loginForm/LoginForm";
 import useAuthStore from "./store/useAuthStore";
 
 function ProtectedRoute({ children }) {
@@ -19,9 +19,8 @@ function ProtectedRoute({ children }) {
     if (location.pathname === "/") {
       authStore.logout();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, authStore.logout]);
-
   return children;
 }
 

@@ -6,89 +6,60 @@ const axiosInstance = axios.create({
   baseURL: "http://localhost:5000/api",
 });
 
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      const authStore = useAuthStore.getState();
-      authStore.logout();
+const setupInterceptors = () => {
+  axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response && error.response.status === 401) {
+        const authStore = useAuthStore.getState();
+        authStore.logout();
+      }
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
+  );
+};
+setupInterceptors();
+
+const prepareHeaders = () => {
+  const token = localStorage.getItem("authToken");
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+};
+
+const handleRequest = async (url, method, data = null) => {
+  try {
+    const response = await axiosInstance({
+      method,
+      url,
+      data,
+      headers: prepareHeaders(),
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error ${method} data at ${url}:`, error);
+    throw error;
   }
-);
+};
 
 const apiService = {
-  baseURL: "http://localhost:5000/api",
-  fetchData: async (url, method, data = null) => {
-    try {
-      const token = localStorage.getItem("authToken");
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      const response = await axiosInstance({ method, url, data, headers });
-      return response.data;
-    } catch (error) {
-      console.error(`Error ${method} data at ${url}:`, error);
-      throw error;
-    }
-  },
+  // Product Operations
+  listProducts: () => handleRequest("/product/list", "get"),
+  deleteProduct: (itemId) =>
+    handleRequest(`/product/${itemId}/delete`, "delete"),
+  updateProduct: (itemId, data) =>
+    handleRequest(`/product/${itemId}`, "put", data),
+  createProduct: (data) => handleRequest("/product/create", "post", data),
 
-  listProducts: async () => {
-    return apiService.fetchData(`${apiService.baseURL}/product/list`, "get");
-  },
-
-  deleteProduct: async (itemId) => {
-    return apiService.fetchData(
-      `${apiService.baseURL}/product/${itemId}/delete`,
-      "delete",
-      null
-    );
-  },
-  updateProduct: async (itemId, data) => {
-    return apiService.fetchData(
-      `${apiService.baseURL}/product/${itemId}`,
-      "put",
-      data
-    );
-  },
-
-  createProduct: async (data) => {
-    return apiService.fetchData(
-      `${apiService.baseURL}/product/create`,
-      "post",
-      data
-    );
-  },
-
+  // Authentication
   login: async (data) => {
-    try {
-      const response = await apiService.fetchData(
-        `${apiService.baseURL}/login`,
-        "post",
-        data
-      );
-      if (response && response.token) {
-        localStorage.setItem("authToken", response.token);
-      }
-      return response;
-    } catch (error) {
-      console.error("Error during login:", error);
-      throw error;
+    const response = await handleRequest("/login", "post", data);
+    if (response && response.token) {
+      localStorage.setItem("authToken", response.token);
     }
+    return response;
   },
-
-  register: async (data) => {
-    try {
-      return await apiService.fetchData(
-        `${apiService.baseURL}/register`,
-        "post",
-        data
-      );
-    } catch (error) {
-      console.error("Error during registration:", error);
-      throw error;
-    }
-  },
+  register: (data) => handleRequest("/register", "post", data),
 };
 
 export default apiService;
