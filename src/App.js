@@ -1,14 +1,7 @@
-///App.js
+// App.js
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-} from "react-router-dom";
-import FormProduct from "./components/formProduct/FormProduct";
-import LoginForm from "./components/loginForm/LoginForm";
+import { BrowserRouter as Router, useLocation } from "react-router-dom";
+import AppRoutes from "./AppRoutes";
 import useAuthStore from "./store/useAuthStore";
 
 function ProtectedRoute({ children }) {
@@ -21,22 +14,15 @@ function ProtectedRoute({ children }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, authStore.logout]);
+
   return children;
 }
 
 function App() {
-  const { isAuthenticated } = useAuthStore();
-
   return (
     <Router>
       <ProtectedRoute>
-        <Routes>
-          <Route path="/" element={<LoginForm />} />
-          <Route
-            path="/products"
-            element={isAuthenticated ? <FormProduct /> : <Navigate to="/" />}
-          />
-        </Routes>
+        <AppRoutes />
       </ProtectedRoute>
     </Router>
   );

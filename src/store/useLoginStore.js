@@ -1,6 +1,7 @@
-import { create } from 'zustand';
+///useLoginStore.js
+import { create } from "zustand";
 
-const formProductStore = create((set) => ({
+const useLoginStore = create((set) => ({
   loginUsername: "",
   setLoginUsername: (username) => set({ loginUsername: username }),
   loginPassword: "",
@@ -11,4 +12,4 @@ const formProductStore = create((set) => ({
   setSignupPassword: (password) => set({ signupPassword: password }),
 }));
 
-export default formProductStore;
+export default useLoginStore;

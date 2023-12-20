@@ -1,10 +1,12 @@
 ///FormProduct.js
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import apiService from "../../service/apiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import "./FormProduct.css";
+
+import useProductStore from "../../store/useProductStore";
 
 const FormProduct = () => {
   const {
@@ -18,23 +20,29 @@ const FormProduct = () => {
     formState: { errors },
   } = useForm();
 
-  const [data, setData] = useState([]);
-  const [editMode, setEditMode] = useState(false);
-  const [editItemId, setEditItemId] = useState(null);
-  const [apiError, setApiError] = useState(null);
+  const {
+    data,
+    editMode,
+    editItemId,
+    apiError,
+    setData,
+    setEditMode,
+    setEditItemId,
+    setApiError,
+  } = useProductStore();
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const products = await apiService.listProducts();
       setData(products);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [setData]);
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -79,41 +87,44 @@ const FormProduct = () => {
 
   return (
     <div>
-      <h2>Product List</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th className="table-header">Name</th>
-            <th className="table-header">Detail</th>
-            <th className="table-header">Price</th>
-            <th className="table-header">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(data) &&
-            data.map((item) => (
-              <tr key={item._id}>
-                <td className="table-cell">{item.name}</td>
-                <td className="table-cell">{item.detail}</td>
-                <td className="table-cell">{item.price}</td>
-                <td className="table-cell">
-                  <button
-                    style={{ marginRight: "8px" }}
-                    onClick={() => deleteItem(item._id)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => handleEdit(item._id)}
-                    style={{ backgroundColor: "blue", color: "white" }}
-                  >
-                    Edit
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <h2 className="form-title">Product List</h2>
+      <div className="container-table">
+        <table className="table">
+          <thead>
+            <tr>
+              <th className="table-header">Name</th>
+              <th className="table-header">Detail</th>
+              <th className="table-header">Price</th>
+              <th className="table-header">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(data) &&
+              data.map((item) => (
+                <tr key={item._id}>
+                  <td className="table-cell">{item.name}</td>
+                  <td className="table-cell">{item.detail}</td>
+                  <td className="table-cell">{item.price}</td>
+                  <td className="table-cell">
+                    <button
+                      className="delete"
+                      onClick={() => deleteItem(item._id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="edit"
+                      onClick={() => handleEdit(item._id)}
+                      style={{ backgroundColor: "blue", color: "white" }}
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
 
       <div className="form-container">
         {editMode && (
