@@ -99,7 +99,7 @@ const FormProduct = () => {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(data) &&
+            {
               data.map((item) => (
                 <tr key={item._id}>
                   <td className="table-cell">{item.name}</td>
