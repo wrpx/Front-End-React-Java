@@ -36,7 +36,9 @@ const LoginForm = () => {
         console.log("Signup successful", response);
       }
     } catch (error) {
-      console.error(isLogin ? "Login failed" : "Signup failed", error);
+      if (error.response) {
+        console.error("Server Response:", error.response.data);
+      }
     }
   };
 
