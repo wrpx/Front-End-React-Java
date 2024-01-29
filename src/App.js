@@ -1,7 +1,7 @@
 // App.js
 import React from "react";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
-import AppRoutes from "./AppRoutes";
+import AppRoutes from "./route/route";
 import useAuthStore from "./store/useAuthStore";
 
 function ProtectedRoute({ children }) {

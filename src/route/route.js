@@ -1,9 +1,9 @@
 // AppRoutes.js
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import FormProduct from './components/formProduct/FormProduct';
-import LoginForm from './components/loginForm/LoginForm';
-import useAuthStore from './store/useAuthStore';
+import FormProduct from '../components/formProduct/FormProduct';
+import LoginForm from '../components/loginForm/LoginForm';
+import useAuthStore from '../store/useAuthStore';
 
 function AppRoutes() {
   const { isAuthenticated } = useAuthStore();
