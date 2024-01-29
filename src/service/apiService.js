@@ -3,7 +3,7 @@ import axios from "axios";
 import useAuthStore from "../store/useAuthStore";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "http://localhost:8080/api",
 });
 
 const setupInterceptors = () => {
@@ -37,28 +37,32 @@ const handleRequest = async (url, method, data = null) => {
     });
     return response.data;
   } catch (error) {
-    throw error;
+    if (axios.isCancel(error)) {
+      throw new Error("คำขอถูกยกเลิก");
+    } else if (!error.response) {
+      throw new Error("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
+    } else {
+      throw new Error(
+        error.response.data.message || "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์"
+      );
+    }
   }
 };
 
 const apiService = {
-  // Product Operations
-  listProducts: () => handleRequest("/product/list", "get"),
-  deleteProduct: (itemId) =>
-    handleRequest(`/product/${itemId}/delete`, "delete"),
+  listProducts: () => handleRequest("/products", "get"),
+  deleteProduct: (itemId) => handleRequest(`/products/${itemId}`, "delete"),
   updateProduct: (itemId, data) =>
-    handleRequest(`/product/${itemId}`, "put", data),
-  createProduct: (data) => handleRequest("/product/create", "post", data),
-
-  // Authentication
+    handleRequest(`/products/${itemId}`, "put", data),
+  createProduct: (data) => handleRequest("/products", "post", data),
   login: async (data) => {
-    const response = await handleRequest("/login", "post", data);
+    const response = await handleRequest("/auth/login", "post", data);
     if (response && response.token) {
       localStorage.setItem("authToken", response.token);
     }
     return response;
   },
-  register: (data) => handleRequest("/register", "post", data),
+  register: (data) => handleRequest("/auth/register", "post", data),
 };
 
 export default apiService;

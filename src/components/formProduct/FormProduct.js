@@ -1,14 +1,17 @@
 ///FormProduct.js
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import apiService from "../../service/apiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import "./FormProduct.css";
 
-import useProductStore from "../../store/useProductStore";
-
 const FormProduct = () => {
+  const [data, setData] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+  const [editItemId, setEditItemId] = useState(null);
+  const [apiError, setApiError] = useState(null);
+
   const {
     register,
     handleSubmit,
@@ -20,17 +23,6 @@ const FormProduct = () => {
     formState: { errors },
   } = useForm();
 
-  const {
-    data,
-    editMode,
-    editItemId,
-    apiError,
-    setData,
-    setEditMode,
-    setEditItemId,
-    setApiError,
-  } = useProductStore();
-
   const loadData = useCallback(async () => {
     try {
       const products = await apiService.listProducts();
@@ -38,7 +30,7 @@ const FormProduct = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }, [setData]);
+  }, []);
 
   useEffect(() => {
     loadData();
@@ -99,29 +91,28 @@ const FormProduct = () => {
             </tr>
           </thead>
           <tbody>
-            {
-              data.map((item) => (
-                <tr key={item._id}>
-                  <td className="table-cell">{item.name}</td>
-                  <td className="table-cell">{item.detail}</td>
-                  <td className="table-cell">{item.price}</td>
-                  <td className="table-cell">
-                    <button
-                      className="delete"
-                      onClick={() => deleteItem(item._id)}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      className="edit"
-                      onClick={() => handleEdit(item._id)}
-                      style={{ backgroundColor: "blue", color: "white" }}
-                    >
-                      Edit
-                    </button>
-                  </td>
-                </tr>
-              ))}
+            {data.map((item) => (
+              <tr key={item._id}>
+                <td className="table-cell">{item.name}</td>
+                <td className="table-cell">{item.detail}</td>
+                <td className="table-cell">{item.price}</td>
+                <td className="table-cell">
+                  <button
+                    className="delete"
+                    onClick={() => deleteItem(item._id)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="edit"
+                    onClick={() => handleEdit(item._id)}
+                    style={{ backgroundColor: "blue", color: "white" }}
+                  >
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

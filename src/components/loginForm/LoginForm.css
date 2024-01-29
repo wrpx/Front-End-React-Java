@@ -6,6 +6,7 @@
   align-items: center;
   min-height: 100vh;
   font-family: "Jost", sans-serif;
+  background: linear-gradient(to bottom, #5b51b6, #302b63, #24243e);
 }
 
 .login-form-container .main {
@@ -13,8 +14,10 @@
   height: 500px;
   background: red;
   overflow: hidden;
-  background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38")         no-repeat center/cover;  border-radius: 10px;
-  box-shadow: 5px 20px 50px #000;
+  background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38")
+    no-repeat center/cover;
+  border-radius: 10px;
+  box-shadow: 1px 10px 100px #1d0831;
   background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
 }
 
@@ -78,17 +81,18 @@
   height: 460px;
   background: #eee;
   border-radius: 60%/10%;
-  transform: translateY(-180px);
+  transform: translateY(-500px);
   transition: 0.8s ease-in-out;
 }
 
 .login-form-container .login label {
   color: #573b8a;
   transform: scale(0.6);
+
 }
 
 .login-form-container #chk:checked ~ .login {
-  transform: translateY(-500px);
+  transform: translateY(-180px);
 }
 
 .login-form-container #chk:checked ~ .login label {
