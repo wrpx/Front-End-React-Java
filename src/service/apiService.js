@@ -38,16 +38,17 @@ const handleRequest = async (url, method, data = null) => {
     return response.data;
   } catch (error) {
     if (axios.isCancel(error)) {
-      throw new Error("คำขอถูกยกเลิก");
+      throw new Error("Request canceled");
     } else if (!error.response) {
-      throw new Error("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
+      throw new Error("Unable to connect to the server");
     } else {
       throw new Error(
-        error.response.data.message || "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์"
+        error.response.data.message || "Server error occurred"
       );
     }
   }
 };
+
 
 const apiService = {
   listProducts: () => handleRequest("/products", "get"),
