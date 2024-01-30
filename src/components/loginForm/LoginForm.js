@@ -46,11 +46,7 @@ const LoginForm = () => {
       login();
       navigate("/products");
     } catch (error) {
-      const errorMessage =
-        error.response && error.response.data
-          ? `Login failed: ${error.response.data}`
-          : "Login failed: An unknown error occurred";
-      showMessageWithTimeout(errorMessage, false);
+      showMessageWithTimeout(error.message, false);
     }
   };
 
@@ -64,11 +60,7 @@ const LoginForm = () => {
       setSignupUsername("");
       setSignupPassword("");
     } catch (error) {
-      const errorMessage =
-        error.response && error.response.data
-          ? `Signup failed: ${error.response.data}`
-          : "Signup failed: An unknown error occurred";
-      showMessageWithTimeout(errorMessage, false);
+      showMessageWithTimeout(error.message, false);
     }
   };
 

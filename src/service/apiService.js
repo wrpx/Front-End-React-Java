@@ -20,7 +20,6 @@ const setupInterceptors = () => {
 };
 setupInterceptors();
 
-
 const handleRequest = async (url, method, data = null) => {
   try {
     const response = await axiosInstance({
@@ -35,7 +34,8 @@ const handleRequest = async (url, method, data = null) => {
     } else if (!error.response) {
       throw new Error("Unable to connect to the server");
     } else {
-      throw new Error(error.response.data.message || "Server error occurred");
+      const message = error.response.data || "An error occurred on the server.";
+      throw new Error(message);
     }
   }
 };
