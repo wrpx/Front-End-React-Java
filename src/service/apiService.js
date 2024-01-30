@@ -36,7 +36,7 @@ const handleRequest = async (url, method, data = null) => {
       headers: prepareHeaders(),
     });
     return response.data;
-  } catch (error) {
+  } catch (error) { 
     if (axios.isCancel(error)) {
       throw new Error("Request canceled");
     } else if (!error.response) {

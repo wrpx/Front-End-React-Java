@@ -54,8 +54,12 @@ const FormProduct = () => {
       setEditItemId(null);
       setApiError(null);
     } catch (error) {
-      setError("form", { type: "server", message: error.response.data.error });
-      setApiError(error.response.data.error);
+      const errorMessage =
+        error.response && error.response.data
+          ? error.response.data.error
+          : "An unspecified error occurred.";
+      setError("form", { type: "server", message: errorMessage });
+      setApiError(errorMessage);
     }
   };
 
@@ -69,7 +73,7 @@ const FormProduct = () => {
   };
 
   const handleEdit = (itemId) => {
-    const editItem = data.find((item) => item._id === itemId);
+    const editItem = data.find((item) => item.id === itemId);
     ["name", "detail", "price"].forEach((field) =>
       setValue(field, editItem[field])
     );
@@ -79,7 +83,7 @@ const FormProduct = () => {
 
   return (
     <div>
-      <h2 className="form-title">Product List</h2>
+      <h2 className="form-title">React-JavaSpring CRUD</h2>
       <div className="container-table">
         <table className="table">
           <thead>
@@ -92,20 +96,20 @@ const FormProduct = () => {
           </thead>
           <tbody>
             {data.map((item) => (
-              <tr key={item._id}>
+              <tr key={item.id}>
                 <td className="table-cell">{item.name}</td>
                 <td className="table-cell">{item.detail}</td>
                 <td className="table-cell">{item.price}</td>
                 <td className="table-cell">
                   <button
                     className="delete"
-                    onClick={() => deleteItem(item._id)}
+                    onClick={() => deleteItem(item.id)}
                   >
                     Delete
                   </button>
                   <button
                     className="edit"
-                    onClick={() => handleEdit(item._id)}
+                    onClick={() => handleEdit(item.id)}
                     style={{ backgroundColor: "blue", color: "white" }}
                   >
                     Edit

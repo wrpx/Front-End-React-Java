@@ -10,6 +10,7 @@ const LoginForm = () => {
   const [loginPassword, setLoginPassword] = useState("");
   const [signupUsername, setSignupUsername] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -40,7 +41,13 @@ const LoginForm = () => {
         username: signupUsername,
         password: signupPassword,
       });
-      console.log("Signup successful", response);
+      // console.log("Signup successful", response);
+      setSuccessMessage(response);
+      setSignupUsername("");
+      setSignupPassword("");
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 3000);
     } catch (error) {
       if (error.response && error.response.data) {
         setError("Signup failed: " + error.response.data);
@@ -51,6 +58,7 @@ const LoginForm = () => {
       }
     }
   };
+  
 
   const handleSubmit = (event, isLogin) => {
     event.preventDefault();
@@ -61,6 +69,20 @@ const LoginForm = () => {
       handleSignup();
     }
   };
+
+  const MessageAlert = ({ message, isError }) => (
+    <div className="flex justify-center">
+      <div
+        className={`alert-message mt-3 text-sm ${
+          isError
+            ? "text-red-600 bg-red-100 border-l-4 border-red-500"
+            : "text-green-600 bg-green-100 border-l-4 border-green-500"
+        } p-4 rounded-[10px]`}
+      >
+        {message}
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -117,15 +139,10 @@ const LoginForm = () => {
             </form>
           </div>
         </div>
-        {error && (
-          <div className="flex justify-center ">
-            <div
-              className="error-message mt-3 text-sm text-red-600 bg-red-100
-             border-l-4 border-red-500 p-4 rounded-[10px]"
-            >
-              {error}
-            </div>
-          </div>
+
+        {error && <MessageAlert message={error} isError={true} />}
+        {successMessage && (
+          <MessageAlert message={successMessage} isError={false} />
         )}
       </div>
     </>
