@@ -74,19 +74,7 @@ const LoginForm = () => {
     }
   };
 
-  const MessageAlert = ({ message, isError, show }) => (
-    <div className={`flex justify-center ${!show && "fade-out"}`}>
-      <div
-        className={`alert-message mt-3 text-sm ${
-          isError
-            ? "text-red-600 bg-red-100 border-l-4 border-red-500"
-            : "text-green-600 bg-green-100 border-l-4 border-green-500"
-        } p-4 rounded-[10px]`}
-      >
-        {message}
-      </div>
-    </div>
-  );
+
 
   return (
     <>
@@ -160,3 +148,18 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+
+
+export const MessageAlert = ({ message, isError, show }) => (
+  <div className={`flex justify-center ${!show && "fade-out"}`}>
+    <div
+      className={`alert-message mt-3 text-sm ${
+        isError
+          ? "text-red-600 bg-red-100 border-l-4 border-red-500"
+          : "text-green-600 bg-green-100 border-l-4 border-green-500"
+      } p-4 rounded-[10px]`}
+    >
+      {message}
+    </div>
+  </div>
+);

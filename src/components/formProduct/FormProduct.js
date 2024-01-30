@@ -5,20 +5,21 @@ import { useForm } from "react-hook-form";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import apiService from "../../service/apiService";
 import "./FormProduct.css";
+import { MessageAlert } from "../loginForm/LoginForm";
 
 const FormProduct = () => {
   const [data, setData] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [editItemId, setEditItemId] = useState(null);
   const [apiError, setApiError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
     setValue,
-    getValues,
-    trigger,
     formState: { errors },
   } = useForm();
 
@@ -31,6 +32,16 @@ const FormProduct = () => {
       setApiError("Error fetching data");
     }
   }, []);
+
+  const showMessageWithTimeout = (message, isSuccess) => {
+    if (isSuccess) {
+      setSuccessMessage(message);
+    } else {
+      setApiError(message);
+    }
+    setShowMessage(true);
+    setTimeout(() => setShowMessage(false), 5000);
+  };
 
   useEffect(() => {
     loadData();
@@ -49,10 +60,13 @@ const FormProduct = () => {
       setEditItemId(null);
       reset();
       loadData();
+      showMessageWithTimeout("Product saved successfully", true);
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || "An unspecified error occurred.";
-      setApiError(errorMessage);
+      setApiError(
+        error.response?.data?.message || "An unspecified error occurred."
+      );
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 5000);
     }
   };
 
@@ -137,6 +151,7 @@ const FormProduct = () => {
         <h2 className="form-title">
           {editMode ? "Edit Product" : "Add New Product"}
         </h2>
+
         <form onSubmit={handleSubmit(onSubmit)} className="form">
           {["name", "detail", "price"].map((field) => (
             <div key={field} className="input-container">
@@ -158,20 +173,18 @@ const FormProduct = () => {
             </div>
           ))}
           {errors.form && <p className="error">{errors.form.message}</p>}
-          <button
-            type="submit"
-            className="submit-button"
-            onClick={async () => {
-              await trigger();
-              if (errors.form || apiError) {
-                onSubmit(getValues());
-              }
-            }}
-          >
+          <button type="submit" className="submit-button">
             {editMode ? "Submit" : "Add Product"}
           </button>
         </form>
       </div>
+      {showMessage && (
+        <MessageAlert
+          message={apiError || successMessage}
+          isError={!successMessage}
+          show={showMessage}
+        />
+      )}
     </div>
   );
 };
