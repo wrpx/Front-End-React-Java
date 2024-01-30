@@ -1,9 +1,9 @@
 ///LoginForm.js
-import React, { useState } from "react";
-import "./LoginForm.css";
-import apiService from "../../service/apiService";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import apiService from "../../service/apiService";
 import useAuthStore from "../../store/useAuthStore";
+import "./LoginForm.css";
 
 const LoginForm = () => {
   const [loginUsername, setLoginUsername] = useState("");
@@ -12,9 +12,30 @@ const LoginForm = () => {
   const [signupPassword, setSignupPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
 
   const navigate = useNavigate();
   const { login } = useAuthStore();
+
+  useEffect(() => {
+    if (!showMessage) {
+      const timer = setTimeout(() => {
+        setError("");
+        setSuccessMessage("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showMessage]);
+
+  const showMessageWithTimeout = (message, isSuccess) => {
+    if (isSuccess) {
+      setSuccessMessage(message);
+    } else {
+      setError(message);
+    }
+    setShowMessage(true);
+    setTimeout(() => setShowMessage(false), 5000);
+  };
 
   const handleLogin = async () => {
     try {
@@ -25,13 +46,11 @@ const LoginForm = () => {
       login();
       navigate("/products");
     } catch (error) {
-      if (error.response && error.response.data) {
-        setError("Login failed: " + error.response.data);
-        console.error("Server Response:", error.response.data);
-      } else {
-        setError("Login failed: An unknown error occurred");
-        console.error("Login Error:", error);
-      }
+      const errorMessage =
+        error.response && error.response.data
+          ? `Login failed: ${error.response.data}`
+          : "Login failed: An unknown error occurred";
+      showMessageWithTimeout(errorMessage, false);
     }
   };
 
@@ -41,24 +60,17 @@ const LoginForm = () => {
         username: signupUsername,
         password: signupPassword,
       });
-      // console.log("Signup successful", response);
-      setSuccessMessage(response);
+      showMessageWithTimeout(response, true);
       setSignupUsername("");
       setSignupPassword("");
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
     } catch (error) {
-      if (error.response && error.response.data) {
-        setError("Signup failed: " + error.response.data);
-        console.error("Server Response:", error.response.data);
-      } else {
-        setError("Signup failed: An unknown error occurred");
-        console.error("Signup Error:", error);
-      }
+      const errorMessage =
+        error.response && error.response.data
+          ? `Signup failed: ${error.response.data}`
+          : "Signup failed: An unknown error occurred";
+      showMessageWithTimeout(errorMessage, false);
     }
   };
-  
 
   const handleSubmit = (event, isLogin) => {
     event.preventDefault();
@@ -70,8 +82,8 @@ const LoginForm = () => {
     }
   };
 
-  const MessageAlert = ({ message, isError }) => (
-    <div className="flex justify-center">
+  const MessageAlert = ({ message, isError, show }) => (
+    <div className={`flex justify-center ${!show && "fade-out"}`}>
       <div
         className={`alert-message mt-3 text-sm ${
           isError
@@ -140,9 +152,15 @@ const LoginForm = () => {
           </div>
         </div>
 
-        {error && <MessageAlert message={error} isError={true} />}
+        {error && (
+          <MessageAlert message={error} isError={true} show={showMessage} />
+        )}
         {successMessage && (
-          <MessageAlert message={successMessage} isError={false} />
+          <MessageAlert
+            message={successMessage}
+            isError={false}
+            show={showMessage}
+          />
         )}
       </div>
     </>

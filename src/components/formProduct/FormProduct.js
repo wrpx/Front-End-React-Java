@@ -1,9 +1,9 @@
 ///FormProduct.js
 import React, { useEffect, useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
-import apiService from "../../service/apiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useForm } from "react-hook-form";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
+import apiService from "../../service/apiService";
 import "./FormProduct.css";
 
 const FormProduct = () => {
@@ -17,9 +17,8 @@ const FormProduct = () => {
     handleSubmit,
     reset,
     setValue,
-    setError,
-    trigger,
     getValues,
+    trigger,
     formState: { errors },
   } = useForm();
 
@@ -29,6 +28,7 @@ const FormProduct = () => {
       setData(products);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setApiError("Error fetching data");
     }
   }, []);
 
@@ -36,29 +36,22 @@ const FormProduct = () => {
     loadData();
   }, [loadData]);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
+  const handleInputChange = ({ target: { name, value } }) =>
     setValue(name, value);
-  };
 
   const onSubmit = async (formData) => {
     try {
-      const apiUrl = editMode
+      const action = editMode
         ? apiService.updateProduct(editItemId, formData)
         : apiService.createProduct(formData);
-
-      await apiUrl;
-      loadData();
-      reset();
+      await action;
       setEditMode(false);
       setEditItemId(null);
-      setApiError(null);
+      reset();
+      loadData();
     } catch (error) {
       const errorMessage =
-        error.response && error.response.data
-          ? error.response.data.error
-          : "An unspecified error occurred.";
-      setError("form", { type: "server", message: errorMessage });
+        error.response?.data?.error || "An unspecified error occurred.";
       setApiError(errorMessage);
     }
   };
@@ -69,20 +62,21 @@ const FormProduct = () => {
       loadData();
     } catch (error) {
       console.error("Error deleting data:", error);
+      setApiError("Error deleting data");
     }
   };
 
   const handleEdit = (itemId) => {
     const editItem = data.find((item) => item.id === itemId);
-    ["name", "detail", "price"].forEach((field) =>
-      setValue(field, editItem[field])
-    );
+    for (const field of ["name", "detail", "price"]) {
+      setValue(field, editItem[field]);
+    }
     setEditMode(true);
     setEditItemId(itemId);
   };
 
   return (
-    <div>
+    <div className="main">
       <h2 className="form-title">React-JavaSpring CRUD</h2>
       <div className="container-table">
         <table className="table">
@@ -101,19 +95,20 @@ const FormProduct = () => {
                 <td className="table-cell">{item.detail}</td>
                 <td className="table-cell">{item.price}</td>
                 <td className="table-cell">
-                  <button
-                    className="delete"
-                    onClick={() => deleteItem(item.id)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="edit"
-                    onClick={() => handleEdit(item.id)}
-                    style={{ backgroundColor: "blue", color: "white" }}
-                  >
-                    Edit
-                  </button>
+                  <div className="button-container">
+                    <button
+                      className="delete"
+                      onClick={() => deleteItem(item.id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="edit"
+                      onClick={() => handleEdit(item.id)}
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -124,7 +119,7 @@ const FormProduct = () => {
       <div className="form-container">
         {editMode && (
           <button
-            className="cancel-button"
+            className="cancel-button rounded-[100px]"
             onClick={() => {
               setEditMode(false);
               setEditItemId(null);

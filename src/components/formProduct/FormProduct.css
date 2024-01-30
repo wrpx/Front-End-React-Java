@@ -4,6 +4,7 @@
   border-collapse: collapse;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   margin: 0 auto;
+  border-radius: 8px;
 }
 
 .table th,
@@ -37,13 +38,35 @@
 }
 
 .table-cell button.edit {
-  background-color: #1976d2;
+  background-color: #4285f4;
   color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.edit:hover {
+  background-color: #357abd;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .table-cell button.delete {
-  background-color: #d32f2f;
+  background-color: #ff6666;
   color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.delete:hover {
+  background-color: #ff4d4d;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .table-cell button.edit:hover {
@@ -52,6 +75,13 @@
 
 .table-cell button.delete:hover {
   background-color: #c62828;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
 }
 
 .form-container {
@@ -111,6 +141,22 @@
   color: #d32f2f;
   margin-top: 5px;
   font-size: 14px;
+}
+
+.cancel-button {
+  background-color: #ff6666;
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 10px 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #ff4d4d;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {

@@ -20,12 +20,6 @@ const setupInterceptors = () => {
 };
 setupInterceptors();
 
-const prepareHeaders = () => {
-  const token = localStorage.getItem("authToken");
-  return {
-    Authorization: `Bearer ${token}`,
-  };
-};
 
 const handleRequest = async (url, method, data = null) => {
   try {
@@ -33,22 +27,18 @@ const handleRequest = async (url, method, data = null) => {
       method,
       url,
       data,
-      headers: prepareHeaders(),
     });
     return response.data;
-  } catch (error) { 
+  } catch (error) {
     if (axios.isCancel(error)) {
       throw new Error("Request canceled");
     } else if (!error.response) {
       throw new Error("Unable to connect to the server");
     } else {
-      throw new Error(
-        error.response.data.message || "Server error occurred"
-      );
+      throw new Error(error.response.data.message || "Server error occurred");
     }
   }
 };
-
 
 const apiService = {
   listProducts: () => handleRequest("/products", "get"),
@@ -58,9 +48,6 @@ const apiService = {
   createProduct: (data) => handleRequest("/products", "post", data),
   login: async (data) => {
     const response = await handleRequest("/auth/login", "post", data);
-    if (response && response.token) {
-      localStorage.setItem("authToken", response.token);
-    }
     return response;
   },
   register: (data) => handleRequest("/auth/register", "post", data),
