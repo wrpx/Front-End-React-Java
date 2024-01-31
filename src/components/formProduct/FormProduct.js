@@ -49,7 +49,7 @@ const FormProduct = () => {
       loadData();
     } catch (error) {
       showMessageWithTimeout(
-        error.response?.data?.message || "An unspecified error occurred.",
+        error.message || "An unspecified error occurred.",
         false
       );
     }
@@ -91,7 +91,7 @@ const FormProduct = () => {
   }, [loadData]);
 
   return (
-    <div class="form-product-container">
+    <div className="form-product-container">
       <h2 className="form-title">React-JavaSpring CRUD</h2>
       <div className="container-table">
         <ProductTable
