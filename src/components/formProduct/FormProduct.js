@@ -91,38 +91,34 @@ const FormProduct = () => {
   }, [loadData]);
 
   return (
-    <div className="main">
-      <div className="main-product-table">
-        <h2 className="form-title">React-JavaSpring CRUD</h2>
-        <div className="container-table">
-          <ProductTable
-            data={data}
-            deleteItem={deleteItem}
-            handleEdit={handleEdit}
-          />
-        </div>
-      </div>
-      <div className="main-product-form">
-        <ProductForm
-          editMode={editMode}
-          handleInputChange={handleInputChange}
-          handleSubmit={handleSubmit(onSubmit)}
-          register={register}
-          errors={errors}
-          resetForm={() => {
-            setEditMode(false);
-            setEditItemId(null);
-            reset();
-          }}
+    <div class="form-product-container">
+      <h2 className="form-title">React-JavaSpring CRUD</h2>
+      <div className="container-table">
+        <ProductTable
+          data={data}
+          deleteItem={deleteItem}
+          handleEdit={handleEdit}
         />
-        {showMessage && (
-          <MessageAlert
-            message={apiError || successMessage}
-            isError={!successMessage}
-            show={showMessage}
-          />
-        )}
       </div>
+      <ProductForm
+        editMode={editMode}
+        handleInputChange={handleInputChange}
+        handleSubmit={handleSubmit(onSubmit)}
+        register={register}
+        errors={errors}
+        resetForm={() => {
+          setEditMode(false);
+          setEditItemId(null);
+          reset();
+        }}
+      />
+      {showMessage && (
+        <MessageAlert
+          message={apiError || successMessage}
+          isError={!successMessage}
+          show={showMessage}
+        />
+      )}
     </div>
   );
 };

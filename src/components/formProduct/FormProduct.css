@@ -1,14 +1,23 @@
+body {
+  overflow: hidden;
+}
+
+.form-product-container {
+  background: linear-gradient(to bottom, #5b51b6, #302b63, #24243e);
+  padding: 20px;
+  min-height: 100vh;
+}
+
 .table {
   width: 50%;
   margin-top: 20px;
   border-collapse: collapse;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   margin: 0 auto;
-  border-radius: 8px;
+  background-color: white;
 }
 
-.table th,
-.table td {
+.table th, .table td {
   padding: 12px;
   text-align: left;
   border-bottom: 1px solid #ddd;
@@ -37,44 +46,34 @@
   transition: background-color 0.2s;
 }
 
+.table-cell button.edit,
+.table-cell button.delete {
+  font-weight: bold;
+  border-radius: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
 .table-cell button.edit {
   background-color: #4285f4;
   color: white;
-  border: none;
-  border-radius: 30px;
   padding: 8px 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.edit:hover {
-  background-color: #357abd;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .table-cell button.delete {
   background-color: #ff6666;
   color: white;
-  border: none;
-  border-radius: 30px;
   padding: 8px 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.delete:hover {
-  background-color: #ff4d4d;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .table-cell button.edit:hover {
   background-color: #1565c0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .table-cell button.delete:hover {
   background-color: #c62828;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .button-container {
@@ -93,11 +92,22 @@
   background-color: white;
 }
 
+.form-container .form-title {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+  color: #4629ca;
+}
+
+.form-product-container .label {
+  color: #1f0c75;
+}
+
 .form-title {
   margin-bottom: 20px;
   text-align: center;
   font-size: 24px;
-  color: #333;
+  color: #ffffff;
 }
 
 .form {
@@ -113,13 +123,14 @@
 .input {
   padding: 10px;
   margin-bottom: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid #6412b1;
   border-radius: 4px;
   font-size: 16px;
 }
 
-.input-container {
-  margin: 0 auto;
+.input:focus {
+  border: 2px solid #590d70;
+  outline: none;
 }
 
 .submit-button {
@@ -130,7 +141,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.5s;
 }
 
 .submit-button:hover {
